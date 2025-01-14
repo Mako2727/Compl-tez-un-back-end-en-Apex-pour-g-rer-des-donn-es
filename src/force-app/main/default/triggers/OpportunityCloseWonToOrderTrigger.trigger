@@ -55,7 +55,7 @@ trigger OpportunityCloseWonToOrderTrigger on Opportunity(after update,before  up
                 return;//je sors
              }
             
-            
+             opp.addError(label.ErrorProduitInsuffisant);
             System.debug('Le nombre de produit pour le type client n est pas suffisant');      
 
             
