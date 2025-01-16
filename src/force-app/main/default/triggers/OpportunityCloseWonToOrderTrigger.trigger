@@ -22,11 +22,12 @@ trigger OpportunityCloseWonToOrderTrigger on Opportunity(after update,before  up
             System.debug('typeClient = ' + acc.TypeClient__c);
             System.debug('productCount = ' + productCount);                
             System.debug('pays = ' + acc.ShippingCountry);  
+            System.debug('opp.Id = ' + opp.Id);  
             
              // Créer un nouvel enregistrement Order
              Order newOrder = new Order(
                 AccountId = opp.AccountId,  // Associer l'Order à l'Account
-                //Opportunity__c = opp.Id,    // Associer l'Order à l'Opportunity
+                OpportunityId__c = opp.Id,    // Associer l'Order à l'Opportunity
                 Status = 'Draft',           // Mettre l'Order en statut 'Draft' (ou un autre statut si nécessaire)
                 TypeClient__c = acc.TypeClient__c, // Assigner le TypeClient récupéré
                 Pays__c = acc.ShippingCountry,   // Assigner le pays de livraison (ShippingCountry)
