@@ -1,0 +1,63 @@
+<template>
+    <!-- Conteneur principal -->
+    <div class="container">
+        <!-- Ligne avec deux vignettes pour le plus cher et le moins cher -->
+        <div class="row">
+            <!-- Vignette pour le transporteur le plus cher -->
+            <div class="slds-max-large-size_xx-large">
+                <h2><b>Le moins cher</b></h2>               
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Nom du transporteur</th>
+                            <th>Délai de livraison (jours)</th>
+                            <th>Tarif</th>
+                            <th>Choisir</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>{bestPriceTransporteurName}</td>
+                            <td>{bestPriceDelaiLivraison}</td>
+                            <td>{bestPriceTarif}</td>
+                            <td><input type="radio" name="choixTransport" value="cheapest" onchange={handleShippingChange}></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Vignette pour le transporteur le moins cher -->
+            <div class="slds-max-large-size_xx-large">
+                <h2><b>Le plus rapide</b></h2>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Nom du transporteur</th>
+                            <th>Délai de livraison (jours)</th>
+                            <th>Tarif</th>
+                            <th>Choisir</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>{FasterDeliveryTransporteurName}</td>
+                            <td>{FasterDeliveryDelaiLivraison}</td>
+                            <td>{FasterDeliveryTarif}</td>
+                            <td><input type="radio" name="choixTransport" value="fastest" onchange={handleShippingChange}></td>
+                        </tr>
+                    </tbody>
+                </table>
+                <!-- Bouton pour choisir la livraison -->
+                <div class="action-button">
+                    <button onclick={handleChooseShipping}>Choisir cette livraison</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Zone large pour l'état de la livraison -->
+        <div class="row etat-livraison">
+            <h2>État de la livraison</h2>
+            <p>Suivi de l'état actuel de la livraison.</p>
+        </div>
+    </div>
+</template>

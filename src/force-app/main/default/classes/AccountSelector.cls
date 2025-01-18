@@ -5,6 +5,14 @@ public with sharing class AccountSelector {
                 FROM Account
                 WHERE Id = :accountId LIMIT 1 ];
     }
+
+
+    public static Opportunity getAccountByOppId(Id oppId) {
+        return [
+            SELECT Id, Name,Account.ShippingCountry,Account.TypeClient__c
+            FROM Opportunity
+                WHERE Id = :oppId LIMIT 1 ];
+    }
 }
 
    
