@@ -6,12 +6,12 @@ public with sharing class OrderService {
     }
 
     @AuraEnabled(Cacheable=true)
-    public static Prix__c getBestPrice(Id opportunityId) {
-        System.debug('OpportunityId= '+ OpportunityId);
-        Opportunity acc = AccountSelector.getAccountByOppId(OpportunityId);  //a partir de l opportunité je recupere le accountID     
+    public static Prix__c getBestPrice(Id orderId) {
+        System.debug('orderId= '+ orderId);
+        Order ord = AccountSelector.getAccountByOppId(orderId);  //a partir de l order je recupere le accountID     
         
-       string TypeClient= acc.Account.TypeClient__c;              
-       string Pays=acc.Account.ShippingCountry;   
+       string TypeClient= ord.Account.TypeClient__c;              
+       string Pays=ord.Account.ShippingCountry;   
 
     List<Prix__c> transporteurs = TransporterSelector.getTransporteurOrderByPriceDesc(pays, typeClient);
 
@@ -21,22 +21,22 @@ public with sharing class OrderService {
     }
 
     @AuraEnabled(Cacheable=true)
-    public static Prix__c getFasterDelivery(Id opportunityId) {
-        Opportunity acc = AccountSelector.getAccountByOppId(OpportunityId);  //a partir de l opportunité je recupere le accountID          
+    public static Prix__c getFasterDelivery(Id orderId) {
+        Order ord = AccountSelector.getAccountByOppId(orderId);  //a partir de l opportunité je recupere le accountID          
         
-        string TypeClient= acc.Account.TypeClient__c;              
-        string Pays=acc.Account.ShippingCountry;  
+        string TypeClient= ord.Account.TypeClient__c;              
+        string Pays=ord.Account.ShippingCountry;  
     List<Prix__c> transporteurs = TransporterSelector.getTransporteurOrderByFasterDesc(pays, typeClient);
     Prix__c fastestTransporter = transporteurs[0]; // Le plus rapide est le premier de la liste
     System.debug('Transporteur le plus rapide trouvé : ' + fastestTransporter.TransporteurID__r.Name);
     return fastestTransporter;
     }
 
-    @AuraEnabled(Cacheable=true)
-    public static void CreateLivraison(string Status,string OpportunityId,string shippingOption)
+    @AuraEnabled(Cacheable=false)
+    public static void CreateLivraison(string Status,string OrderId,string shippingOption,string TransporteurName)
     {
         try {
-            TransporterSelector.CreateShipping(Status,OpportunityId,shippingOption);
+            TransporterSelector.CreateShipping(Status,OrderId,shippingOption,TransporteurName);
             System.debug('insertion dans Livraison ok  sur Order');
         } catch (Exception ex ) {
             System.debug('Erreur insert ...'+ ex);

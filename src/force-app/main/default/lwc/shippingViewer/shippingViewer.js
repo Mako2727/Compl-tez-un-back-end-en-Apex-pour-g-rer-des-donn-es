@@ -20,20 +20,21 @@ export default class shippingViewer extends LightningElement {
     @track FasterDeliveryDelaiLivraison;
     @track FasterDeliveryTarif;
     @track OptionShipping;
-    @track OpportunityId;
+    @track orderId;
+    @track transporteurName;
 
-    @wire(getBestPrice, { opportunityId: "$recordId" })
+    @wire(getBestPrice, { orderId: "$recordId" })
     wiredBestPrice(result) 
     {
-        //console.log('OpportunityId reçu : ' +  this.recordId);
-        //console.log("OpportunityId=" + this.recordId);
+        console.log('Order reçu : ' +  this.recordId);
+        //console.log("OrderId=" + this.recordId);
         //this.wiredBestPriceResult = result; // Stocke le résultat    
-        this.OpportunityId=  this.recordId;
+        this.orderId=  this.recordId;
         const { data, error } = result;
-        console.log("Contenu de data :", JSON.stringify(data, null, 2)); // Affiche tout le contenu de data
-        console.log("Contenu de result :", JSON.stringify(result, null, 2)); // Affiche tout le contenu de data
+        console.log("Contenu de data BestPrice:", JSON.stringify(data, null, 2)); // Affiche tout le contenu de data
+        console.log("Contenu de result BestPrice:", JSON.stringify(result, null, 2)); // Affiche tout le contenu de data
         if (data) {
-            console.log("OpportunityId=" + data.Id);
+            console.log("OrderId=" + data.Id);
             console.log("DelaiDeLivraisonJours__c=" + data.DelaiDeLivraisonJours__c);
             console.log("tarif__c=" + data.Tarif__c);
             console.log("Nom Transporteur=" + data.TransporteurID__r.Name);
@@ -48,18 +49,18 @@ export default class shippingViewer extends LightningElement {
     }
 
 
-    @wire(getFasterDelivery, { opportunityId: "$recordId" })
+    @wire(getFasterDelivery, { orderId: "$recordId" })
     wiredFasterDelivery(result) 
     {
-        //console.log('OpportunityId reçu : ' +  this.recordId);
-        this.OpportunityId=  this.recordId;
-        //console.log("OpportunityId=" + this.recordId);
+        //console.log('OrderId reçu : ' +  this.recordId);
+        this.orderId=  this.recordId;
+        console.log("orderIdId=" + this.recordId);
         //this.wiredBestPriceResult = result; // Stocke le résultat      
         const { data, error } = result;
-        console.log("Contenu de data :", JSON.stringify(data, null, 2)); // Affiche tout le contenu de data
-        console.log("Contenu de result :", JSON.stringify(result, null, 2)); // Affiche tout le contenu de data
+        console.log("Contenu de data Faster :", JSON.stringify(data, null, 2)); // Affiche tout le contenu de data
+        console.log("Contenu de result Faster :", JSON.stringify(result, null, 2)); // Affiche tout le contenu de data
         if (data) {
-            console.log("OpportunityId=" + data.Id);
+            console.log("OrderId=" + data.Id);
             console.log("FasterDeliveryDelaiDeLivraisonJours__c=" + data.DelaiDeLivraisonJours__c);
             console.log("FasterDeliverytarif__c=" + data.Tarif__c);
             console.log("FasterDeliveryNom Transporteur=" + data.TransporteurID__r.Name);
@@ -77,8 +78,11 @@ export default class shippingViewer extends LightningElement {
        try
        {
          const selectedValue = event.target.value; // Récupère la valeur du bouton radio sélectionné
+         console.log("event.target =", JSON.stringify(event.target, null, 2));
         console.log('Transport sélectionné : ', selectedValue);
-        //console.log("actionName : " + actionName);
+        this.transporteurName = event.target.dataset.transporteur;
+        console.log("transporteurName : " + this.transporteurName);
+       
         //actionName=selectedValue;
         if (selectedValue === "cheapest") {
             this.OptionShipping="cheapest";         
@@ -101,15 +105,17 @@ export default class shippingViewer extends LightningElement {
                     console.log("je demarre la selection de la livraison.... " );
                     //const transportId = event.target.dataset.transportId;
                     //console.log('Livraison choisie pour le transporteur ID :', transportId);
-                    console.log('OpportunityId= :', this.OpportunityId);
-                   console.log("je créé la livraison : " + this.OptionShipping);
+                    console.log('OrderId= :', this.orderId);
+                   console.log("OptionShipping: " + this.OptionShipping);
+                   console.log("transporteurName= : " + this.transporteurName);
                     // Effectuer une action, comme stocker l'ID dans une propriété
                     //this.selectedTransportId = transportId;
                     
                     CreateLivraison({ 
                         Status: 'en cours', 
-                        OpportunityId: this.OpportunityId, 
-                        shippingOption: this.OptionShipping 
+                        OrderId: this.orderId, 
+                        shippingOption: this.OptionShipping ,
+                        TransporteurName: this.transporteurName 
                     })
                     .then(() => {
                         console.log('Livraison créée avec succès.');

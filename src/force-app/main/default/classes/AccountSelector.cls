@@ -7,11 +7,11 @@ public with sharing class AccountSelector {
     }
 
 
-    public static Opportunity getAccountByOppId(Id oppId) {
+    public static Order getAccountByOppId(Id orderId) {
         return [
             SELECT Id, Name,Account.ShippingCountry,Account.TypeClient__c
-            FROM Opportunity
-                WHERE Id = :oppId LIMIT 1 ];
+            FROM Order
+                WHERE Id = :orderId LIMIT 1 ];
     }
 }
 

@@ -1,6 +1,6 @@
 <template>
     <!-- Conteneur principal -->
-    <div class="container">
+    <div class="slds-tabs_card">
         <!-- Ligne avec deux vignettes pour le plus cher et le moins cher -->
         <div class="row">
             <!-- Vignette pour le transporteur le plus cher -->
@@ -20,7 +20,7 @@
                             <td>{bestPriceTransporteurName}</td>
                             <td>{bestPriceDelaiLivraison}</td>
                             <td>{bestPriceTarif}</td>
-                            <td><input type="radio" name="choixTransport" value="cheapest" onchange={handleShippingChange}></td>
+                            <td><input type="radio" name="choixTransport" value="cheapest"  data-transporteur={FasterDeliveryTransporteurName} onchange={handleShippingChange}></td>
                         </tr>
                     </tbody>
                 </table>
@@ -43,13 +43,13 @@
                             <td>{FasterDeliveryTransporteurName}</td>
                             <td>{FasterDeliveryDelaiLivraison}</td>
                             <td>{FasterDeliveryTarif}</td>
-                            <td><input type="radio" name="choixTransport" value="fastest" onchange={handleShippingChange}></td>
+                            <td><input  type="radio" name="choixTransport" value="fastest"  data-transporteur={FasterDeliveryTransporteurName}  onchange={handleShippingChange}></td>
                         </tr>
                     </tbody>
                 </table>
                 <!-- Bouton pour choisir la livraison -->
-                <div class="action-button">
-                    <button onclick={handleChooseShipping}>Choisir cette livraison</button>
+                <div >
+                    <button class="slds-button slds-button--neutral slds-button_neutral" onclick={handleChooseShipping}>Choisir cette livraison</button>
                 </div>
             </div>
         </div>
