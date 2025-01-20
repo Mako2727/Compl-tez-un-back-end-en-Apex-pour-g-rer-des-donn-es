@@ -19,6 +19,15 @@ public with sharing class TransporterSelector {
             ];
     }
 
+    public static List<Prix__c> getOtherTransporteur(string Pays) {
+        return [
+            SELECT Id, TransporteurID__c, DelaiDeLivraisonJours__c,Pays__c,tarif__c,TransporteurID__r.TypeClient__c,TransporteurID__r.name 
+            FROM Prix__c  
+            where pays__c=:Pays 
+            order by DelaiDeLivraisonJours__c asc
+            ];
+    }
+
     public static void CreateShipping(String Status, String OrderId, String shippingOption,string TransporteurName) {
         try {
             System.debug('Status=' + Status);

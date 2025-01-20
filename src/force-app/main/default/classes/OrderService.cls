@@ -32,6 +32,24 @@ public with sharing class OrderService {
     return fastestTransporter;
     }
 
+
+
+
+
+    @AuraEnabled(Cacheable=true)
+    public static List<Prix__c> getOtherTransporteur(Id orderId) {
+        Order ord = AccountSelector.getAccountByOppId(orderId);  //a partir de l opportunité je recupere le accountID          
+        
+        string TypeClient= ord.Account.TypeClient__c;              
+        string Pays=ord.Account.ShippingCountry;  
+    List<Prix__c> transporteurs = TransporterSelector.getOtherTransporteur(pays);
+    //Prix__c OtherTransporter = transporteurs; // Le plus rapide est le premier de la liste
+    System.debug('Nombre de Transporteurs : ' + transporteurs.size());
+    return transporteurs;
+    }
+    
+
+
     @AuraEnabled(Cacheable=false)
     public static void CreateLivraison(string Status,string OrderId,string shippingOption,string TransporteurName)
     {

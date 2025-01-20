@@ -4,7 +4,7 @@
         <!-- Ligne avec deux vignettes pour le plus cher et le moins cher -->
         <div class="row">
             <!-- Vignette pour le transporteur le plus cher -->
-            <div class="slds-max-large-size_xx-large">
+            <div class="slds-max-large-size_xx-large slds-table slds-table_cell-buffer slds-table_bordered slds-border_bottom">
                 <h2><b>Le moins cher</b></h2>               
                 <table>
                     <thead>
@@ -16,18 +16,19 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <tr>
+                        <tr onclick={handleRowClick}>
                             <td>{bestPriceTransporteurName}</td>
                             <td>{bestPriceDelaiLivraison}</td>
                             <td>{bestPriceTarif}</td>
-                            <td><input type="radio" name="choixTransport" value="cheapest"  data-transporteur={FasterDeliveryTransporteurName} onchange={handleShippingChange}></td>
+                            <td><input type="radio" name="choixTransport" value="cheapest"  data-transporteur={bestPriceTransporteurName} onchange={handleShippingChange}></td>
                         </tr>
                     </tbody>
                 </table>
             </div>
-
+            <br><br>
+           
             <!-- Vignette pour le transporteur le moins cher -->
-            <div class="slds-max-large-size_xx-large">
+            <div class="slds-max-large-size_xx-large slds-table slds-table_cell-buffer slds-table_bordered slds-border_bottom">
                 <h2><b>Le plus rapide</b></h2>
                 <table>
                     <thead>
@@ -39,7 +40,7 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <tr>
+                        <tr onclick={handleRowClick}>
                             <td>{FasterDeliveryTransporteurName}</td>
                             <td>{FasterDeliveryDelaiLivraison}</td>
                             <td>{FasterDeliveryTarif}</td>
@@ -47,6 +48,37 @@
                         </tr>
                     </tbody>
                 </table>
+                <br><br>
+            
+                
+
+                  <!-- section les autres transporteurs -->
+                  <div class="slds-max-large-size_xx-large slds-table slds-table_cell-buffer slds-table_bordered slds-border_bottom">
+                    <h2><b>Autre options de livraison</b></h2>
+               
+                  <table class="slds-table slds-table_cell-buffer slds-table_bordered slds-border_righ slds-border_left">
+                    <thead>
+                        <tr>
+                            <th scope="col">Nom du transporteur</th>
+                             <th scope="col">Délai de livraison</th>
+                            <th scope="col">Tarif</th>  
+                            <th scope="col">Choisir</th> <!-- Nouvelle colonne pour le bouton radio -->                         
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <template for:each={Othertransporteurs} for:item="transporteur">
+                            <tr key={transporteur.Id} onclick={handleRowClick}>
+                                <td>{transporteur.TransporteurID__r.Name }</td> 
+                                <td>{transporteur.DelaiDeLivraisonJours__c}</td>
+                                <td>{transporteur.Tarif__c}</td>
+                                <td>
+                                    <input type="radio" name="choixTransport" value="other" data-transporteur={transporteur.TransporteurID__r.Name}   onchange={handleShippingChange}  class="radio-btn">
+                                </td> <!-- Ajout du bouton radio -->
+                            </tr>
+                        </template>
+                    </tbody>
+                </table>
+           </div>
                 <!-- Bouton pour choisir la livraison -->
                 <div >
                     <button class="slds-button slds-button--neutral slds-button_neutral" onclick={handleChooseShipping}>Choisir cette livraison</button>

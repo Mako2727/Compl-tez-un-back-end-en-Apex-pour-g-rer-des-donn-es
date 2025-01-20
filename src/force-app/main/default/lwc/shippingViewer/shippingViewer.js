@@ -2,6 +2,7 @@ import { LightningElement, api, wire, track } from "lwc";
 import getBestPrice from "@salesforce/apex/OrderService.getBestPrice";
 import getFasterDelivery from "@salesforce/apex/OrderService.getFasterDelivery";
 import CreateLivraison from "@salesforce/apex/OrderService.CreateLivraison";
+import getOtherTransporteur from "@salesforce/apex/OrderService.getOtherTransporteur";
 
 
 
@@ -22,7 +23,10 @@ export default class shippingViewer extends LightningElement {
     @track OptionShipping;
     @track orderId;
     @track transporteurName;
+    @track Othertransporteurs;
 
+
+    //le moins cher
     @wire(getBestPrice, { orderId: "$recordId" })
     wiredBestPrice(result) 
     {
@@ -31,8 +35,8 @@ export default class shippingViewer extends LightningElement {
         //this.wiredBestPriceResult = result; // Stocke le résultat    
         this.orderId=  this.recordId;
         const { data, error } = result;
-        console.log("Contenu de data BestPrice:", JSON.stringify(data, null, 2)); // Affiche tout le contenu de data
-        console.log("Contenu de result BestPrice:", JSON.stringify(result, null, 2)); // Affiche tout le contenu de data
+        /*console.log("Contenu de data BestPrice:", JSON.stringify(data, null, 2)); // Affiche tout le contenu de data
+        console.log("Contenu de result BestPrice:", JSON.stringify(result, null, 2)); // Affiche tout le contenu de data*/
         if (data) {
             console.log("OrderId=" + data.Id);
             console.log("DelaiDeLivraisonJours__c=" + data.DelaiDeLivraisonJours__c);
@@ -48,7 +52,7 @@ export default class shippingViewer extends LightningElement {
             }
     }
 
-
+    //le plus rapide
     @wire(getFasterDelivery, { orderId: "$recordId" })
     wiredFasterDelivery(result) 
     {
@@ -57,8 +61,8 @@ export default class shippingViewer extends LightningElement {
         console.log("orderIdId=" + this.recordId);
         //this.wiredBestPriceResult = result; // Stocke le résultat      
         const { data, error } = result;
-        console.log("Contenu de data Faster :", JSON.stringify(data, null, 2)); // Affiche tout le contenu de data
-        console.log("Contenu de result Faster :", JSON.stringify(result, null, 2)); // Affiche tout le contenu de data
+        /*console.log("Contenu de data Faster :", JSON.stringify(data, null, 2)); // Affiche tout le contenu de data
+        console.log("Contenu de result Faster :", JSON.stringify(result, null, 2)); // Affiche tout le contenu de data*/
         if (data) {
             console.log("OrderId=" + data.Id);
             console.log("FasterDeliveryDelaiDeLivraisonJours__c=" + data.DelaiDeLivraisonJours__c);
@@ -74,20 +78,71 @@ export default class shippingViewer extends LightningElement {
             }
     }
 
+    //tous les autres
+    @wire(getOtherTransporteur, { orderId: "$recordId" })
+    wiredOtherTransporteur(result) 
+    {
+        //console.log('OrderId reçu : ' +  this.recordId);
+        this.orderId=  this.recordId;
+        console.log("orderIdId=" + this.recordId);
+        //this.wiredBestPriceResult = result; // Stocke le résultat      
+        const { data, error } = result;
+         //console.log("getOtherTransporteur data:", JSON.stringify(data, null, 2)); // Affiche tout le contenu de data
+        if (data) {
+
+            try {
+                if (data) {
+
+                    const FasterDeliveryTransporteurName = this.FasterDeliveryTransporteurName;  // Transporteur le plus rapide
+                    const bestPriceTransporteurName = this.bestPriceTransporteurName;  // Transporteur le moins cher
+                    console.log("FasterDeliveryTransporteurName:", FasterDeliveryTransporteurName);
+                    console.log("bestPriceTransporteurName:", bestPriceTransporteurName);
+                    this.Othertransporteurs = data.filter(transporteur => {
+                        console.log('Transporteur en cours:', transporteur.TransporteurID__r.Name);
+                        return transporteur.TransporteurID__r.Name !== FasterDeliveryTransporteurName &&
+                               transporteur.TransporteurID__r.Name !== bestPriceTransporteurName;
+                    });
+                    
+                    console.log("getOtherTransporteur result:", JSON.stringify(result, null, 2)); // Affiche tout le contenu de dataporteurs = data;
+                } else if (error) {
+                    console.error("Erreur lors de la récupération des transporteurs :", error.body.message);
+                }
+            } catch (err) {
+                console.error("Erreur inattendue :", err);
+            }
+           
+    }
+}
+handleRowClick(event) {
+    // Récupère l'élément radio dans la ligne
+    const row = event.currentTarget;
+    const radioButton = row.querySelector('input[type="radio"]');
+   // console.log("radioButton =", JSON.stringify(radioButton, null, 2));
+    // Si le bouton radio existe, déclenche son événement onchange
+    if (radioButton) {
+        radioButton.checked = true; // Coche le bouton radio
+        this.handleShippingChange({ target: radioButton }); // Déclenche l'événement onchange
+    }
+}
+
     handleShippingChange(event) {
        try
        {
          const selectedValue = event.target.value; // Récupère la valeur du bouton radio sélectionné
-         console.log("event.target =", JSON.stringify(event.target, null, 2));
-        console.log('Transport sélectionné : ', selectedValue);
+         //console.log("event.target =", JSON.stringify(event.target, null, 2));
+        //console.log('Type Transport sélectionné : ', selectedValue);
         this.transporteurName = event.target.dataset.transporteur;
         console.log("transporteurName : " + this.transporteurName);
        
         //actionName=selectedValue;
         if (selectedValue === "cheapest") {
             this.OptionShipping="cheapest";         
-        } else if (selectedValue === "fastest") {
+        } 
+        else if (selectedValue === "fastest") {
             this.OptionShipping="fastest";
+        }
+        else if (selectedValue === "other") {
+            this.OptionShipping="Autrre Option de livraison";
         }
         console.log("OptionShipping : " + this.OptionShipping);
        }
