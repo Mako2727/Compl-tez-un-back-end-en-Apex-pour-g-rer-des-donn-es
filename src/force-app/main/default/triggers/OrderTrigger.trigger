@@ -1,4 +1,6 @@
 trigger OrderTrigger on Order (before update) {
+    //recupere les acc 
+    //recupere  List<OrderItem>
     for (Order ord : Trigger.new) {
         if (ord.Status == 'Activated' && Trigger.oldMap.get(ord.Id).Status != 'Activated') {   
           
