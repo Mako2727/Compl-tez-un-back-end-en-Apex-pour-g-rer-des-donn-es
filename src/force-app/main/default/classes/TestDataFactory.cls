@@ -196,18 +196,19 @@ public class TestDataFactory {
     );
 
     insert testOrders;
+    Id orderId = testOrders[0].Id;
 
-    // Créer des OrderItems associés aux commandes
+    // Créer des OrderItems associés
     List<OrderItem> testOrderItems = new List<OrderItem>();
-    for (Order ord : testOrders) {
-      testOrderItems.add(
-        new OrderItem(
-          OrderId = ord.Id,
-          PricebookEntryId = standardPricebookEntry.Id, // Lier l'OrderItem au PricebookEntry
-          Quantity = 1, // Exemple de valeur pour Quantity
-          UnitPrice = 10.0 // Exemple de valeur pour UnitPrice
-        )
-      );
+    for (Integer i = 0; i < 2; i++) {
+        testOrderItems.add(
+            new OrderItem(
+                OrderId = orderId,
+                PricebookEntryId = standardPricebookEntry.Id,
+                Quantity = i + 1,
+                UnitPrice = 10.0 * (i + 1)
+            )
+        );
     }
     insert testOrderItems;
   }
@@ -254,18 +255,19 @@ public class TestDataFactory {
     );
 
     insert testOrders;
+    Id orderId = testOrders[0].Id;
 
-    // Créer des OrderItems associés aux commandes
+    // Créer des OrderItems associés
     List<OrderItem> testOrderItems = new List<OrderItem>();
-    for (Order ord : testOrders) {
-      testOrderItems.add(
-        new OrderItem(
-          OrderId = testOrders[0].Id,
-          PricebookEntryId = standardPricebookEntry.Id, 
-          Quantity = 1, 
-          UnitPrice = 10.0 
-        )
-      );
+    for (Integer i = 0; i < 2; i++) {
+        testOrderItems.add(
+            new OrderItem(
+                OrderId = orderId,
+                PricebookEntryId = standardPricebookEntry.Id,
+                Quantity = i + 1,
+                UnitPrice = 10.0 * (i + 1)
+            )
+        );
     }
     insert testOrderItems;
   }

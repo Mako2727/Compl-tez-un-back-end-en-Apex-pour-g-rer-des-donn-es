@@ -134,7 +134,7 @@ public with sharing class OrderService {
     string transporteurid
   ) {
     try {
-      TransporterSelector.CreateShipping(
+      PriceSelector.CreateShipping(
         Status,
         OrderId,
         shippingOption,
