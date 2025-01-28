@@ -1,5 +1,5 @@
 public with sharing class PriceSelector {
-    public static List<Prix__c> getTransporteurOrderByPriceDesc(string Pays,string TypeClient) {
+    public static List<Prix__c> getTransporteurOrderByPriceAsc(string Pays,string TypeClient) {
         return [
             SELECT Id, TransporteurID__c, DelaiDeLivraisonJours__c,Pays__c,tarif__c,TransporteurID__r.TypeClient__c,TransporteurID__r.name 
             FROM Prix__c  
@@ -9,7 +9,7 @@ public with sharing class PriceSelector {
             ];
     }
 
-    public static List<Prix__c> getTransporteurOrderByFasterDesc(string Pays,string TypeClient) {
+    public static List<Prix__c> getTransporteurOrderByFasterAsc(string Pays,string TypeClient) {
         return [
             SELECT Id, TransporteurID__c, DelaiDeLivraisonJours__c,Pays__c,tarif__c,TransporteurID__r.TypeClient__c,TransporteurID__r.name 
             FROM Prix__c  

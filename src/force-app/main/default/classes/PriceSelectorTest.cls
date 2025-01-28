@@ -12,7 +12,7 @@ private class PriceSelectorTest {
     static void testgetTransporteurOrderByPriceDesc()
     {
         Test.startTest();
-        List<Prix__c> results = PriceSelector.getTransporteurOrderByPriceDesc('France','Particulier');
+        List<Prix__c> results = PriceSelector.getTransporteurOrderByPriceAsc('France','Particulier');
         Test.stopTest();        
         System.assertEquals('best_Price_Transporteur', results[0].TransporteurID__r.name, 'Le transporteur devrait etre best_Price_Transporteur le prix est de '+ results[0].Tarif__c);
     }
@@ -22,7 +22,7 @@ private class PriceSelectorTest {
     static void testgetgetTransporteurOrderByFasterDesc()
     {
         Test.startTest();
-        List<Prix__c> results = PriceSelector.getTransporteurOrderByFasterDesc('France','Particulier');
+        List<Prix__c> results = PriceSelector.getTransporteurOrderByFasterAsc('France','Particulier');
         Test.stopTest();        
         System.assertEquals('faster_Transporteur', results[0].TransporteurID__r.name, 'Le transporteur devrait etre faster_Transporteur le delai est de ' + results[0].DelaiDeLivraisonJours__c);
     }

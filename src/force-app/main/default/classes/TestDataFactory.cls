@@ -130,19 +130,7 @@ public static void createTestgetTransporteurPrice()
     for (Order ord : testOrders) {
         orderIds.add(ord.Id);
     }
-
-   // Appel de la méthode à tester
-   
     List<OrderItem> orderItems = OrderSelector.getOrderItemByIds(orderIds);
-   
-
-    /* // Validation des résultats
-    System.assertNotEquals(null, orderItems, 'La liste des OrderItems ne doit pas être nulle');
-    System.assertEquals(testOrderItems.size(), orderItems.size(), 'Le nombre d\'OrderItems retourné doit être égal à celui inséré');*/
-
-    // Retourner la liste des OrderItems pour d'autres vérifications si nécessaire
     return orderItems;
     }
-
-
 }

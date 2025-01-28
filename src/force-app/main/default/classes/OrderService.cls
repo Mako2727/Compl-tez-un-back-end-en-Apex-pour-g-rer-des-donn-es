@@ -85,13 +85,11 @@ public with sharing class OrderService {
 
     @AuraEnabled(Cacheable=true)
     public static Prix__c getBestPrice(Id orderId) {
-        //System.debug('orderId= '+ orderId);
         Order ord = AccountSelector.getAccountByOppId(orderId);  //a partir de l order je recupere le accountID    
        string TypeClient= ord.Account.TypeClient__c;              
        string Pays=ord.Account.ShippingCountry;   
-    List<Prix__c> transporteurs = PriceSelector.getTransporteurOrderByPriceDesc(pays, typeClient);
+    List<Prix__c> transporteurs = PriceSelector.getTransporteurOrderByPriceAsc(pays, typeClient);
     Prix__c lowerPriceTransporter = transporteurs[0]; 
-    //System.debug('Transporteur le plus rapide trouvé : ' + lowerPriceTransporter.TransporteurID__r.Name);
     return lowerPriceTransporter;
     }
 
@@ -100,9 +98,8 @@ public with sharing class OrderService {
           Order ord = AccountSelector.getAccountByOppId(orderId);  //a partir de l opportunité je recupere le accountID    
         string TypeClient= ord.Account.TypeClient__c;              
         string Pays=ord.Account.ShippingCountry;  
-    List<Prix__c> transporteurs = PriceSelector.getTransporteurOrderByFasterDesc(pays, typeClient);
-    Prix__c fastestTransporter = transporteurs[0]; // Le plus rapide est le premier de la liste
-    //System.debug('Transporteur le plus rapide trouvé : ' + fastestTransporter.TransporteurID__r.Name);
+    List<Prix__c> transporteurs = PriceSelector.getTransporteurOrderByFasterAsc(pays, typeClient);
+    Prix__c fastestTransporter = transporteurs[0]; // Le plus rapide est le premier de la liste   
     return fastestTransporter;
     }
 
@@ -112,8 +109,6 @@ public with sharing class OrderService {
         string TypeClient= ord.Account.TypeClient__c;              
         string Pays=ord.Account.ShippingCountry;  
     List<Prix__c> transporteurs = PriceSelector.getOtherTransporteur(pays);
-    //Prix__c OtherTransporter = transporteurs; // Le plus rapide est le premier de la liste
-    //System.debug('Nombre de Transporteurs : ' + transporteurs.size());
     return transporteurs;
     }
     
@@ -124,13 +119,12 @@ public with sharing class OrderService {
     {
         try {
             TransporterSelector.CreateShipping(Status,OrderId,shippingOption,TransporteurName,transporteurid);
-            //System.debug('insertion dans Livraison ok  sur Order');
         } catch (Exception ex ) {
             System.debug('Erreur insert ...'+ ex);
         }
         
     }
 
-    //TODO : Completer la classe avec toute autre méthode nécessaire pour gérer la logique métier liée aux commandes
+ 
 
 }
