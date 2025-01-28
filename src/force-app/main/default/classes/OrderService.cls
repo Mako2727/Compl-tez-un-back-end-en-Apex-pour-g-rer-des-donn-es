@@ -53,19 +53,11 @@ public with sharing class OrderService {
                  {
                     System.debug('Je ne créé pas la commande pour le particulier car il n y a pas assez de produit');   
                     throw new OrderValidationException('Vous devez avoir au moins 3 produit pour valider la commande!');
-                 }
-         
+                 }         
         }
         }
-
     }
-
-
-
-
-
     
-
     @AuraEnabled(Cacheable=true)
     public static Boolean getcheckOrder(Id ordID )
     {  Boolean bCheck=true;
