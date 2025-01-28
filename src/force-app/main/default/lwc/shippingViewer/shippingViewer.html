@@ -1,108 +1,151 @@
-<template >
-    <template  if:true={isAccessible} >
+<template>
+  <template if:true={isAccessible}>
     <!-- Conteneur principal -->
-      <template  if:true={checkOrder} >
-              
-    
-    <div class="slds-tabs_card">
-        
+    <template if:true={checkOrder}>
+      <div class="slds-tabs_card">
         <!-- Ligne avec deux vignettes pour le plus cher et le moins cher -->
         <div class="row">
-            <!-- Vignette pour le transporteur le plus cher -->
-            <div class="slds-max-large-size_xx-large slds-table slds-table_cell-buffer slds-table_bordered slds-border_righ slds-border_left">
-                <h2><b>Le moins cher</b></h2>               
-                <table>
-                    <thead>
-                        <tr>
-                            <th style="width: 200px;">Nom du transporteur</th>
-                            <th style="width: 200px;">Délai de livraison (jours)</th>
-                            <th style="width: 200px;">Tarif</th>
-                            <th style="width: 200px;">Pays</th>
-                            <th style="width: 200px;">Choisir</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr onclick={handleRowClick}>
-                            <td style="display: none;">{bestPriceTransporteurId}</td>
-                            <td style="width: 200px;">{bestPriceTransporteurName}</td>
-                            <td style="width: 200px;">{bestPriceDelaiLivraison}</td>
-                            <td style="width: 200px;">{bestPriceTarif}</td>
-                            <td style="width: 200px;">{bestPriceTransporteurCountry}</td>
-                            <td style="width: 200px;"><input type="radio" name="choixTransport" value="cheapest" data-transporteurid={bestPriceTransporteurId} data-transporteur={bestPriceTransporteurName}  data-priceid={bestPriceId}  onchange={handleShippingChange}></td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
-            <br><br>
-           
-            <!-- Vignette pour le transporteur le moins cher -->
-            <div class="slds-max-large-size_xx-large slds-table slds-table_cell-buffer slds-table_bordered slds-border_righ slds-border_left">
-                <h2><b>Le plus rapide</b></h2>
-                <table>
-                    <thead>
-                        <tr>
-                            <th style="width: 200px;">Nom du transporteur</th>
-                            <th style="width: 200px;">Délai de livraison (jours)</th>
-                            <th style="width: 200px;">Tarif</th>
-                            <th style="width: 200px;">Pays</th>
-                            <th style="width: 200px;">Choisir</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr onclick={handleRowClick}>
-                            <td style="display: none;">{FasterDeliveryTransporteurId}</td>
-                            <td style="width: 200px;">{FasterDeliveryTransporteurName}</td>
-                            <td style="width: 200px;">{FasterDeliveryDelaiLivraison}</td>
-                            <td style="width: 200px;">{FasterDeliveryTarif}</td>
-                            <td style="width: 200px;">{FasterDeliveryCountry}</td>
-                            <td style="width: 200px;"><input  type="radio" name="choixTransport" value="fastest"  data-transporteurid={FasterDeliveryTransporteurId} data-transporteur={FasterDeliveryTransporteurName} data-priceid={FasterDeliveryPriceId}  onchange={handleShippingChange}></td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
-                <br><br>
+          <!-- Vignette pour le transporteur le plus cher -->
+          <div
+            class="slds-max-large-size_xx-large slds-table slds-table_cell-buffer slds-table_bordered slds-border_righ slds-border_left"
+          >
+            <h2><b>Le moins cher</b></h2>
+            <table>
+              <thead>
+                <tr>
+                  <th style="width: 200px">Nom du transporteur</th>
+                  <th style="width: 200px">Délai de livraison (jours)</th>
+                  <th style="width: 200px">Tarif</th>
+                  <th style="width: 200px">Pays</th>
+                  <th style="width: 200px">Choisir</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr onclick={handleRowClick}>
+                  <td style="display: none">{bestPriceTransporteurId}</td>
+                  <td style="width: 200px">{bestPriceTransporteurName}</td>
+                  <td style="width: 200px">{bestPriceDelaiLivraison}</td>
+                  <td style="width: 200px">{bestPriceTarif}</td>
+                  <td style="width: 200px">{bestPriceTransporteurCountry}</td>
+                  <td style="width: 200px">
+                    <input
+                      type="radio"
+                      name="choixTransport"
+                      value="cheapest"
+                      data-transporteurid={bestPriceTransporteurId}
+                      data-transporteur={bestPriceTransporteurName}
+                      data-priceid={bestPriceId}
+                      onchange={handleShippingChange}
+                    />
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <br /><br />
 
-                  <!-- section les autres transporteurs -->
-                  <div class="slds-max-large-size_xx-large slds-table slds-table_cell-buffer slds-table_bordered slds-border_bottom  slds-border_righ slds-border_left">
-                    <h2><b>Autre options de livraison</b></h2>
-               
-                  <table class="slds-table slds-table_cell-buffer slds-table_bordered slds-border_righ slds-border_left">
-                    <thead>
-                        <tr>
-                          
-                            <th style="width: 200px;">Nom du transporteur</th>
-                             <th style="width: 200px;" >Délai de livraison</th>
-                            <th style="width: 200px;" >Tarif</th>  
-                            <th style="width: 200px;" >Pays</th>  
-                            <th style="width: 200px;" >Choisir</th> <!-- Nouvelle colonne pour le bouton radio -->                         
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <template for:each={Othertransporteurs} for:item="transporteur">
-                            <tr key={transporteur.Id} onclick={handleRowClick}>
-                                <td style="display: none;">{transporteur.Id}</td>
-                                <td style="display: none;">{transporteur.TransporteurID__c}</td>
-                                <td style="width: 200px;">{transporteur.TransporteurID__r.Name }</td> 
-                                <td style="width: 200px;">{transporteur.DelaiDeLivraisonJours__c}</td>
-                                <td style="width: 200px;">{transporteur.Tarif__c}</td>
-                                <td style="width: 200px;">{transporteur.Pays__c}</td>
-                                <td style="width: 200px;">
-                                    <input type="radio" name="choixTransport" value="other" data-transporteurid={transporteur.TransporteurID__c} data-transporteur={transporteur.TransporteurID__r.Name} data-priceid={transporteur.Id}  onchange={handleShippingChange}  class="radio-btn">
-                                </td> <!-- Ajout du bouton radio -->
-                            </tr>
-                        </template>
-                    </tbody>
-                </table>
-           </div>
-                <!-- Bouton pour choisir la livraison -->
-                <div >
-                    <button class="slds-button slds-button--neutral slds-button_neutral" onclick={handleChooseShipping}>Choisir ce mode de livraison</button>
-                </div>
-           
+          <!-- Vignette pour le transporteur le moins cher -->
+          <div
+            class="slds-max-large-size_xx-large slds-table slds-table_cell-buffer slds-table_bordered slds-border_righ slds-border_left"
+          >
+            <h2><b>Le plus rapide</b></h2>
+            <table>
+              <thead>
+                <tr>
+                  <th style="width: 200px">Nom du transporteur</th>
+                  <th style="width: 200px">Délai de livraison (jours)</th>
+                  <th style="width: 200px">Tarif</th>
+                  <th style="width: 200px">Pays</th>
+                  <th style="width: 200px">Choisir</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr onclick={handleRowClick}>
+                  <td style="display: none">{FasterDeliveryTransporteurId}</td>
+                  <td style="width: 200px">{FasterDeliveryTransporteurName}</td>
+                  <td style="width: 200px">{FasterDeliveryDelaiLivraison}</td>
+                  <td style="width: 200px">{FasterDeliveryTarif}</td>
+                  <td style="width: 200px">{FasterDeliveryCountry}</td>
+                  <td style="width: 200px">
+                    <input
+                      type="radio"
+                      name="choixTransport"
+                      value="fastest"
+                      data-transporteurid={FasterDeliveryTransporteurId}
+                      data-transporteur={FasterDeliveryTransporteurName}
+                      data-priceid={FasterDeliveryPriceId}
+                      onchange={handleShippingChange}
+                    />
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <br /><br />
+
+          <!-- section les autres transporteurs -->
+          <div
+            class="slds-max-large-size_xx-large slds-table slds-table_cell-buffer slds-table_bordered slds-border_bottom slds-border_righ slds-border_left"
+          >
+            <h2><b>Autre options de livraison</b></h2>
+
+            <table
+              class="slds-table slds-table_cell-buffer slds-table_bordered slds-border_righ slds-border_left"
+            >
+              <thead>
+                <tr>
+                  <th style="width: 200px">Nom du transporteur</th>
+                  <th style="width: 200px">Délai de livraison</th>
+                  <th style="width: 200px">Tarif</th>
+                  <th style="width: 200px">Pays</th>
+                  <th style="width: 200px">Choisir</th>
+                  <!-- Nouvelle colonne pour le bouton radio -->
+                </tr>
+              </thead>
+              <tbody>
+                <template for:each={Othertransporteurs} for:item="transporteur">
+                  <tr key={transporteur.Id} onclick={handleRowClick}>
+                    <td style="display: none">{transporteur.Id}</td>
+                    <td style="display: none">
+                      {transporteur.TransporteurID__c}
+                    </td>
+                    <td style="width: 200px">
+                      {transporteur.TransporteurID__r.Name }
+                    </td>
+                    <td style="width: 200px">
+                      {transporteur.DelaiDeLivraisonJours__c}
+                    </td>
+                    <td style="width: 200px">{transporteur.Tarif__c}</td>
+                    <td style="width: 200px">{transporteur.Pays__c}</td>
+                    <td style="width: 200px">
+                      <input
+                        type="radio"
+                        name="choixTransport"
+                        value="other"
+                        data-transporteurid={transporteur.TransporteurID__c}
+                        data-transporteur={transporteur.TransporteurID__r.Name}
+                        data-priceid={transporteur.Id}
+                        onchange={handleShippingChange}
+                        class="radio-btn"
+                      />
+                    </td>
+                    <!-- Ajout du bouton radio -->
+                  </tr>
+                </template>
+              </tbody>
+            </table>
+          </div>
+          <!-- Bouton pour choisir la livraison -->
+          <div>
+            <button
+              class="slds-button slds-button--neutral slds-button_neutral"
+              onclick={handleChooseShipping}
+            >
+              Choisir ce mode de livraison
+            </button>
+          </div>
         </div>
-
-     
-    </div>
-</template>
-</template>
+      </div>
+    </template>
+  </template>
 </template>
