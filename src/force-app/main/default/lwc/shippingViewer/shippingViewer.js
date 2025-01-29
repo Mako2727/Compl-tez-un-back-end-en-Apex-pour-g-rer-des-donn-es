@@ -35,7 +35,7 @@ export default class shippingViewer extends LightningElement {
   @track OrderItemToDisplay;
   @track conditionMet;
 
-  get checkOrder() {
+  get checkOrder() {//appel la methode getcheckOrder qui verifie que j ai au moins les conditions d affichage pour afficher les lignes
     return this.conditionMet;
   }
 
@@ -54,7 +54,7 @@ export default class shippingViewer extends LightningElement {
     }
   }
 
-  get isAccessible() {
+  get isAccessible() {//verifie les droits d acces en fonction du permission Set
     return hasAccessUI;
   }
 
@@ -123,7 +123,7 @@ export default class shippingViewer extends LightningElement {
           const FasterDeliveryTransporteurName =
             this.FasterDeliveryTransporteurName; // Transporteur le plus rapide
           const bestPriceTransporteurName = this.bestPriceTransporteurName; // Transporteur le moins cher
-          this.Othertransporteurs = data.filter((transporteur) => {
+          this.Othertransporteurs = data.filter((transporteur) => {//je supprime le moins cher et le plus rapide car dejà mentionné dans la vue
             return (
               transporteur.TransporteurID__r.Name !==
                 FasterDeliveryTransporteurName &&
@@ -161,7 +161,7 @@ export default class shippingViewer extends LightningElement {
     }
   }
 
-  handleChooseShipping(event) {
+  handleChooseShipping(event) {//clique sur le bouton choisir cette livraison
     try {
       if (
         typeof this.transporteurName === "undefined" ||
