@@ -7,6 +7,9 @@ import getOtherTransporteur from "@salesforce/apex/OrderService.getOtherTranspor
 import { ShowToastEvent } from "lightning/platformShowToastEvent";
 import { RefreshEvent } from "lightning/refresh";
 import hasAccessUI from "@salesforce/customPermission/customPermissionDelivery";
+import { refreshApex } from '@salesforce/apex';
+import { getRecord } from 'lightning/uiRecordApi';
+
 
 export default class shippingViewer extends LightningElement {
   @api recordId;
@@ -33,25 +36,37 @@ export default class shippingViewer extends LightningElement {
   @track bestPriceTransporteurId;
   @track FasterDeliveryTransporteurId;
   @track OrderItemToDisplay;
-  @track conditionMet;
+  @track conditionMet=false;
+  
+  FIELDS = ['Name'];
+
+  @wire(getRecord, { recordId: '$recordId', fields: '$FIELDS' })
+  wiredRecord({ error, data }) {
+      if (error) {
+          console.error('Erreur de récupération des données:', error);
+      } else if (data) {         
+          this.checkOrderStatus(); // Appel pour mettre à jour conditionMet
+      }
+  }
+
+  checkOrderStatus() {
+      getcheckOrder({ ordID: this.recordId })
+          .then((result) => {
+            console.log('recordId==:', this.recordId);
+              console.log('Données de getcheckOrder:', result);
+              this.conditionMet = result; // Mise à jour de conditionMet
+              console.log('conditionMet mise à jour:', this.conditionMet);
+              refreshApex(this.wiredRecord); // Rafraîchit les données du composant
+          })
+          .catch((error) => {
+              console.error('Erreur dans getcheckOrder:', error);
+          });
+  }
+
+
 
   get checkOrder() {//appel la methode getcheckOrder qui verifie que j ai au moins les conditions d affichage pour afficher les lignes
     return this.conditionMet;
-  }
-
-  @wire(getcheckOrder, { ordID: "$recordId" })
-  wiredCondition({ error, data }) {
-    if (typeof this.recordId === "undefined" || this.recordId === undefined) {
-      return;
-    }
-    console.log("Order reçu : " + this.recordId);
-    console.log("Données reçues :", JSON.stringify(data, null, 2));
-    if (data) {
-      console.log("Données reçues :", JSON.stringify(data, null, 2));
-      this.conditionMet = data; // Mise à jour de la variable avec le booléen retourné
-    } else if (error) {
-      console.error("Erreur dans wiredCondition :", error);
-    }
   }
 
   get isAccessible() {//verifie les droits d acces en fonction du permission Set
@@ -163,6 +178,8 @@ export default class shippingViewer extends LightningElement {
 
   handleChooseShipping(event) {//clique sur le bouton choisir cette livraison
     try {
+   
+
       if (
         typeof this.transporteurName === "undefined" ||
         this.transporteurName === undefined

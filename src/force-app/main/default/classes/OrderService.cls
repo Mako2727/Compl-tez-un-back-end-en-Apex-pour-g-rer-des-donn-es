@@ -67,7 +67,7 @@ public with sharing class OrderService {
     }
   }
 
-  @AuraEnabled(Cacheable=true)
+  @AuraEnabled(Cacheable=false)
   public static Boolean getcheckOrder(Id ordID) {
     Boolean bCheck = true;
     try {
@@ -85,6 +85,7 @@ public with sharing class OrderService {
       }
     } catch (Exception ex) {
       System.debug(' Error OrderItem.size() ' + ex.getMessage());
+      bCheck = false;
     }
 
     return bCheck;
