@@ -271,4 +271,63 @@ public class TestDataFactory {
     }
     insert testOrderItems;
   }
+
+
+  @IsTest
+  public static void testgetcheckOrder() {
+    Account testAccount = new Account(
+      Name = 'testgetcheckOrder',
+      ShippingStreet = '123 Main St', // Rue
+      ShippingCity = 'City', // Ville
+      ShippingState = '', // État
+      ShippingPostalCode = '12345', // Code postal
+      ShippingCountry = 'France', // Pays
+      TypeClient__c = 'Professionnel'
+    );
+    insert testAccount;
+
+    // Récupérer le Pricebook standard
+    Id standardPricebookId = Test.getStandardPricebookId();
+
+    // Créer un produit de test
+    Product2 testProduct = new Product2(Name = 'Test Product', IsActive = true);
+    insert testProduct;
+
+    // Créer une entrée de prix standard pour le produit
+    PricebookEntry standardPricebookEntry = new PricebookEntry(
+      Pricebook2Id = standardPricebookId,
+      Product2Id = testProduct.Id,
+      UnitPrice = 100.0, // Exemple de prix standard
+      IsActive = true
+    );
+    insert standardPricebookEntry;
+
+    // Créer d une commandes de test
+    List<Order> testOrders = new List<Order>();
+    testOrders.add(
+      new Order(
+        AccountId = testAccount.Id,
+        EffectiveDate = Date.today(),
+        Status = 'Draft',
+        Pricebook2Id = standardPricebookId // Associer le Pricebook standard à l'Order
+      )
+    );
+
+    insert testOrders;
+    Id orderId = testOrders[0].Id;
+
+    // Créer des OrderItems associés
+    List<OrderItem> testOrderItems = new List<OrderItem>();
+    for (Integer i = 0; i < 6; i++) {
+        testOrderItems.add(
+            new OrderItem(
+                OrderId = orderId,
+                PricebookEntryId = standardPricebookEntry.Id,
+                Quantity = i + 1,
+                UnitPrice = 10.0 * (i + 1)
+            )
+        );
+    }
+    insert testOrderItems;
+  }
 }

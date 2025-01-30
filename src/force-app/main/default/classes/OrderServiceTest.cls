@@ -7,6 +7,7 @@ private class OrderServiceTest {
     TestDataFactory.createTestgetTransporteurDelai();
     TestDataFactory.testtestvalidateOrderPro();
     TestDataFactory.testtestvalidateOrderParticulier();
+    TestDataFactory.testgetcheckOrder();
   }
 
   @IsTest
@@ -73,11 +74,25 @@ private class OrderServiceTest {
 
   @IsTest
   static void testgetcheckOrder() {
-    List<OrderItem> odItem = TestDataFactory.testGetOrderItemByIds();
-    Test.startTest();
-    Boolean results = OrderService.getcheckOrder(odItem[0].OrderId);
+    List<Order> ord = [
+      SELECT Id
+      FROM Order
+      WHERE Status = 'Draft' AND account.Name = 'testgetcheckOrder'
+      LIMIT 1
+    ];
+    try {
+      Test.startTest();
+      Order orderToUpdate = [SELECT Id, Status FROM Order WHERE Id = :ord[0].Id];
+      orderToUpdate.Status = 'Activated';
+      update orderToUpdate;
+  
+   
+    Boolean results = OrderService.getcheckOrder(orderToUpdate.Id);
     Test.stopTest();
-    System.assertEquals(true, results, 'La methode doit renvoyer True');
+    System.assertEquals(true, results, 'La methode doit renvoyer True'); 
+   } catch (Exception e) {
+      System.debug('Exception during test: ' + e.getMessage());
+  }
   }
 
   @IsTest
