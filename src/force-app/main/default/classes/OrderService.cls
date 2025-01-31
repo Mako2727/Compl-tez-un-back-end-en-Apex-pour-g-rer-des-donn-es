@@ -37,11 +37,11 @@ public with sharing class OrderService {
           ? orderLineItems.size()
           : 0;
 
-        System.debug('typeClient = ' + orderToValidate.account.TypeClient__c);
+        System.debug('typeClient = ' + orderToValidate.account.Type);
         System.debug('productCount = ' + productCount);
         //System.debug('pays = ' + acc.ShippingCountry);
 
-        string typeClient = orderToValidate.account.TypeClient__c;
+        string typeClient = orderToValidate.account.Type;
 
         //pour les professionnel + 5 produits
         if (typeClient == 'Professionnel' && productCount < 5) {
@@ -93,8 +93,8 @@ public with sharing class OrderService {
 
   @AuraEnabled(Cacheable=true)
   public static Prix__c getBestPrice(Id orderId) {
-    Order ord = AccountSelector.getAccountByOppId(orderId); //a partir de l order je recupere le accountID
-    string TypeClient = ord.Account.TypeClient__c;
+    Order ord = OrderSelector.getAccountByOppId(orderId); //a partir de l order je recupere le accountID
+    string TypeClient = ord.Account.Type;
     string Pays = ord.Account.ShippingCountry;
     List<Prix__c> transporteurs = PriceSelector.getTransporteurOrderByPriceAsc(
       pays,
@@ -106,8 +106,8 @@ public with sharing class OrderService {
 
   @AuraEnabled(Cacheable=true)
   public static Prix__c getFasterDelivery(Id orderId) {
-    Order ord = AccountSelector.getAccountByOppId(orderId); //a partir de l opportunité je recupere le accountID
-    string TypeClient = ord.Account.TypeClient__c;
+    Order ord = OrderSelector.getAccountByOppId(orderId); //a partir de l opportunité je recupere le accountID
+    string TypeClient = ord.Account.Type;
     string Pays = ord.Account.ShippingCountry;
     List<Prix__c> transporteurs = PriceSelector.getTransporteurOrderByFasterAsc(
       pays,
@@ -119,8 +119,8 @@ public with sharing class OrderService {
 
   @AuraEnabled(Cacheable=true)
   public static List<Prix__c> getOtherTransporteur(Id orderId) {
-    Order ord = AccountSelector.getAccountByOppId(orderId); //a partir de l opportunité je recupere le accountID
-    string TypeClient = ord.Account.TypeClient__c;
+    Order ord = OrderSelector.getAccountByOppId(orderId); //a partir de l opportunité je recupere le accountID
+    string TypeClient = ord.Account.Type;
     string Pays = ord.Account.ShippingCountry;
     List<Prix__c> transporteurs = PriceSelector.getOtherTransporteur(pays);
     return transporteurs;

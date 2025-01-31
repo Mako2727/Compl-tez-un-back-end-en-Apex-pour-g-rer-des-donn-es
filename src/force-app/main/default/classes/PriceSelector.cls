@@ -15,7 +15,7 @@ public with sharing class PriceSelector {
       FROM Prix__c
       WHERE
         pays__c = :Pays
-        AND TransporteurID__r.TypeClient__c LIKE :('%' + TypeClient + '%')
+        AND TransporteurID__r.TypeClient__c =:  TypeClient 
       ORDER BY tarif__c ASC
       LIMIT 1
     ];
@@ -37,7 +37,7 @@ public with sharing class PriceSelector {
       FROM Prix__c
       WHERE
         pays__c = :Pays
-        AND TransporteurID__r.TypeClient__c LIKE :('%' + TypeClient + '%')
+        AND TransporteurID__r.TypeClient__c  =:  TypeClient 
       ORDER BY DelaiDeLivraisonJours__c ASC
       LIMIT 1
     ];

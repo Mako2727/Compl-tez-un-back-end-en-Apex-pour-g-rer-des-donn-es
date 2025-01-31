@@ -55,7 +55,7 @@ public class TestDataFactory {
       ShippingState = '', // État
       ShippingPostalCode = '12345', // Code postal
       ShippingCountry = 'France', // Pays
-      TypeClient__c = 'Particulier'
+      Type = 'Particulier'
     );
     insert testAccount;
 
@@ -98,7 +98,7 @@ public class TestDataFactory {
       ShippingState = '', // État
       ShippingPostalCode = '12345', // Code postal
       ShippingCountry = 'France', // Pays
-      TypeClient__c = 'Particulier'
+      Type= 'Particulier'
     );
     insert testAccount;
 
@@ -164,7 +164,7 @@ public class TestDataFactory {
       ShippingState = '', // État
       ShippingPostalCode = '12345', // Code postal
       ShippingCountry = 'France', // Pays
-      TypeClient__c = 'Professionnel'
+      Type= 'Professionnel'
     );
     insert testAccount;
 
@@ -223,7 +223,7 @@ public class TestDataFactory {
       ShippingState = '', // État
       ShippingPostalCode = '12345', // Code postal
       ShippingCountry = 'France', // Pays
-      TypeClient__c = 'Particulier'
+      Type = 'Particulier'
     );
     insert testAccount;
 
@@ -282,7 +282,7 @@ public class TestDataFactory {
       ShippingState = '', // État
       ShippingPostalCode = '12345', // Code postal
       ShippingCountry = 'France', // Pays
-      TypeClient__c = 'Professionnel'
+      Type = 'Professionnel'
     );
     insert testAccount;
 
